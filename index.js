@@ -1,14 +1,21 @@
+// fired up environment variables
 const env        = require('dotenv')
+env.config() 
+
+// Importing official middlewares
 const express    = require('express')
 const mongoose   = require('mongoose')
 const bodyParser = require('body-parser')
 const cors       = require('cors')
 const passport   = require('passport')
 const path       = require('path')
+ 
+// Initializing express
+const app        = express()
 
-
-env.config() // fired up environment variables
-const app        = express() // Initializing express
+// connect to the database
+const db = require('./config/database')
+db.run(mongoose)
 
 // Defining the server port
 const PORT = process.env.PORT || 5000
@@ -25,6 +32,10 @@ app.get('/', (req, res) => {
         message: "This is node.js role based auth system"
     })
 })
+
+// User routes
+const users = require('./routes/users')
+app.use('/api/users', users)
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`)
